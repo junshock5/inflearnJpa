@@ -1,5 +1,6 @@
 package com.junshock.jpatest;
 
+import com.junshock.jpatest.domain.Member;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,7 +22,7 @@ public class MemberRepositoryTest {
     public void testMember() throws Exception{
         //given
         Member member = new Member();
-        member.setUsername("junshock5");
+        member.setName("junshock5");
 
         //when
         Long saveId = memberRepository.save(member);
@@ -29,7 +30,7 @@ public class MemberRepositoryTest {
         
         //then
         Assertions.assertThat(findMember.getId()).isEqualTo(member.getId());
-        Assertions.assertThat(findMember.getUsername()).isEqualTo(member.getUsername());
+        Assertions.assertThat(findMember.getName()).isEqualTo(member.getName());
         Assertions.assertThat(findMember).isEqualTo(member);
 
         // 같은 영속성 컨텍스트 에서는 저장한 member와 찾은 member가 1차캐시에서 동일한 값이다.
