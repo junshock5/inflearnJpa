@@ -1,6 +1,5 @@
 package com.junshock.jpatest.domain;
 
-import com.junshock.jpatest.domain.item.Order;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,5 +32,5 @@ public class Member {
     private Address address;
 
     @OneToMany(mappedBy = "member") // 하나의 회원이 여러개 주문을 갖는다. 1:N, 연관관계 참조 설정
-    private List<Order> oreders = new ArrayList<>();
+    private List<Order> orders = new ArrayList<>(); // 바로 초기화하여 null 문제 안전, 하이버네이트 엔터티 영속시 내장 컬렉션 변경되기 떄문에 데이터 불일치 방지
 }
