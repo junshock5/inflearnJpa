@@ -3,7 +3,7 @@
 :LetsGrowUpGrass
 git add .
 git commit -m "Planted grass"
-git push -u origin +master > pushlog.txt
+git push -u origin +main > pushlog.txt
 set /p writePushLog=<pushlog.txt
 GOTO CheckGithubUpload
 
