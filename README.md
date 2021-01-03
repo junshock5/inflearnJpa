@@ -58,6 +58,7 @@ UML
 - 카테고리(Category): 상품과 다대다 관계를 맺는다. parent , child 로 부모, 자식 카테고리를 연결한
 다.
 - 주소(Address): 값 타입(임베디드 타입)이다. 회원과 배송(Delivery)에서 사용한다.
+
 ERD
 ---
 ![2](https://user-images.githubusercontent.com/61732452/103482272-49911980-4e23-11eb-8e75-28e8e923c7a7.PNG)
