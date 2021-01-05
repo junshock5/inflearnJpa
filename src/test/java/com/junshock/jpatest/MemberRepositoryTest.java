@@ -1,7 +1,7 @@
 package com.junshock.jpatest;
 
 import com.junshock.jpatest.domain.Member;
-import com.junshock.jpatest.domain.repository.MemberRepository;
+import com.junshock.jpatest.repository.MemberRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;

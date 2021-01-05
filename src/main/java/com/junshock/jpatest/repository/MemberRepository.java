@@ -1,20 +1,20 @@
-package com.junshock.jpatest.domain.repository;
+package com.junshock.jpatest.repository;
 
 import com.junshock.jpatest.domain.Member;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository
+@RequiredArgsConstructor
 public class MemberRepository {
 
-    @PersistenceContext // Spring이 EntityManager를 만들어서 주입.
-    private EntityManager em;
+    private final EntityManager em;
 
     public Long save(Member member) {
-        em.persist(member);
+        em.persist(member); // db insert를 이시점에서 안함. db전략 gericvalue에서는. db commit 될대 insert한다.
         return member.getId();
     }
 
