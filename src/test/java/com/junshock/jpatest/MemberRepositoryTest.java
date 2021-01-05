@@ -1,6 +1,7 @@
 package com.junshock.jpatest;
 
 import com.junshock.jpatest.domain.Member;
+import com.junshock.jpatest.repository.MemberRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 public class MemberRepositoryTest {
     
-    @Autowired MemberRepository memberRepository;
+    @Autowired
+    MemberRepository memberRepository;
 
     @Test
     @Transactional // test에서는 test끝난 후 rollback 하기에 h2 db에 데이터가 없다.
