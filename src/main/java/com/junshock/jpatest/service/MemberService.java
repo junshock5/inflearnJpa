@@ -50,7 +50,7 @@ public class MemberService {
      * @return
      */
     public Member findOne(Long memberId) {
-        return memberRepository.find(memberId);
+        return memberRepository.findOne(memberId);
     }
 
 }
