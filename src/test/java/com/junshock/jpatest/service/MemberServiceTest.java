@@ -38,7 +38,7 @@ public class MemberServiceTest {
 
         //then
         //em.flush(); //롤백을 하더라도 insert한다. 즉 영속성 컨텍스트가 db에 insert를 rollback하기전에 한다.
-        assertEquals(member, memberRepository.find(savedId));
+        assertEquals(member, memberRepository.findOne(savedId));
     }
 
     @Test(expected = IllegalArgumentException.class) //try-catch 문에서 정상 예외를 잡은 후 return 하기에 테스트 성공.
