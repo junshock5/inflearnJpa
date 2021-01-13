@@ -1,6 +1,7 @@
 spring:
   datasource:
-    url: #jdbc:h2:tcp://localhost/~/jpatest
+    #url: #jdbc:h2:tcp://localhost/~/jpatest
+    url: jdbc:h2:~/jpatest
     username: sa
     password:
     driver-class-name: org.h2.Driver
