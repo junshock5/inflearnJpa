@@ -1,5 +1,7 @@
 package com.junshock.jpatest.domain;
 
+import com.junshock.jpatest.domain.dto.Address;
+import com.junshock.jpatest.domain.order.Order;
 import lombok.Getter;
 import lombok.Setter;
 

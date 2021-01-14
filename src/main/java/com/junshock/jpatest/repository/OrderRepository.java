@@ -1,10 +1,12 @@
 package com.junshock.jpatest.repository;
 
-import com.junshock.jpatest.domain.Order;
+import com.junshock.jpatest.domain.order.Order;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Repository
@@ -20,30 +22,40 @@ public class OrderRepository {
         return em.find(Order.class, id);
     }
 
-    public List<Order> findAll(OrderSearch orderSearch) {
+    public List<Order> findAllByString(OrderSearch orderSearch) {
         // 주문 상태 검색 동적 쿼리(가독성 헤침, 버그 발생 가능성 o)
-//        String jpql = "select o from Order o join o.member m";
-//        boolean isFirstCondition = true;
-//        if (orderSearch.getOrderStatus() != null) {
-//            if (isFirstCondition) {
-//                jpql += " where";
-//                isFirstCondition = false;
-//            } else {
-//                jpql += " and";
-//            }
-//            jpql += " o.status = :status";
-//        }
-
-        // Crireterai : 동적쿼리를 작성할떄 자동으로 만들어준다. 단, 유지보수x 쿼리가 안떠오름 jpql(실무 사용 x)
-        // Querydsl : jpql 에서 오타날꺼를 없에줌.
-
-        return em.createQuery("select o from Order o join o.member m" +
-                "where o.status = :status" +
-                "and m.name like :name", Order.class)
-                .setParameter("status", orderSearch.getOrderStatus())
-                .setParameter("name", orderSearch.getMemberName())
-                .setMaxResults(1000)
-                .getResultList();
+        //language=JPAQL
+        String jpql = "select o From Order o join o.member m";
+        boolean isFirstCondition = true;
+        //주문 상태 검색
+        if (orderSearch.getOrderStatus() != null) {
+            if (isFirstCondition) {
+                jpql += " where";
+                isFirstCondition = false;
+            } else {
+                jpql += " and";
+            }
+            jpql += " o.status = :status";
+        }
+        //회원 이름 검색
+        if (StringUtils.hasText(orderSearch.getMemberName())) {
+            if (isFirstCondition) {
+                jpql += " where";
+                isFirstCondition = false;
+            } else {
+                jpql += " and";
+            }
+            jpql += " m.name like :name";
+        }
+        TypedQuery<Order> query = em.createQuery(jpql, Order.class)
+                .setMaxResults(1000); //최대 1000건
+        if (orderSearch.getOrderStatus() != null) {
+            query = query.setParameter("status", orderSearch.getOrderStatus());
+        }
+        if (StringUtils.hasText(orderSearch.getMemberName())) {
+            query = query.setParameter("name", orderSearch.getMemberName());
+        }
+        return query.getResultList();
     }
 
 }

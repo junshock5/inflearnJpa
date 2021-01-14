@@ -1,4 +1,4 @@
-package com.junshock.jpatest.domain;
+package com.junshock.jpatest.domain.dto;
 
 import lombok.Getter;
 

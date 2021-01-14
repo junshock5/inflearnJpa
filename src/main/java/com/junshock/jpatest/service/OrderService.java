@@ -2,17 +2,17 @@ package com.junshock.jpatest.service;
 
 import com.junshock.jpatest.domain.Delivery;
 import com.junshock.jpatest.domain.Member;
-import com.junshock.jpatest.domain.Order;
-import com.junshock.jpatest.domain.OrderItem;
+import com.junshock.jpatest.domain.order.Order;
+import com.junshock.jpatest.domain.order.OrderItem;
 import com.junshock.jpatest.domain.item.Item;
 import com.junshock.jpatest.repository.ItemRepository;
 import com.junshock.jpatest.repository.MemberRepository;
 import com.junshock.jpatest.repository.OrderRepository;
+import com.junshock.jpatest.repository.OrderSearch;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.*;
 import java.util.List;
 
 @Service
@@ -68,8 +68,12 @@ public class OrderService {
         // jpa 사용시 dirty checking 으로 변경된 값을 데이터만 변경해도 db 수정 가능.
     }
 
-      // 검색
-//    public List<Order> findOrders(OrderSearch orderSearch){
-//        return orderRepository.findAll(orderSearch);
-//    }
+    /**
+     * 검색
+     * @param orderSearch
+     * @return
+     */
+    public List<Order> findOrders(OrderSearch orderSearch){
+        return orderRepository.findAllByString(orderSearch);
+    }
 }

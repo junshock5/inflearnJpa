@@ -1,6 +1,6 @@
 package com.junshock.jpatest.controller;
 
-import com.junshock.jpatest.domain.Address;
+import com.junshock.jpatest.domain.dto.Address;
 import com.junshock.jpatest.domain.Member;
 import com.junshock.jpatest.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -32,13 +33,21 @@ public class MemberController {
             return "members/createMemberForm";
         }
 
-        Address address = new Address(form.getCity(), form.getStreet(), form.getZipcode());
-
         Member member = new Member();
         member.setName(form.getName());
-        member.setAddress(address);
+        member.setAddress(new Address(form.getCity(), form.getStreet(), form.getZipcode()));
 
         memberService.join(member);
         return "redirect:/";
     }
+
+    @GetMapping("/members")
+    public String list(Model model){
+        List<Member> members = memberService.findMembers();
+        model.addAttribute("members", members);
+        return "members/memberList";
+    }
+    // API를 만들떄는 절대 Entity를 외부로 반환하면 안된다.
+    // 이유는 API는 spec, ex) 필드 추가시 패스워드 보이고, 스팩이 변경한다.
+    // 단, template Engine thymeleaf 같은 서버 사이드에선 사용해도 무방.
 }

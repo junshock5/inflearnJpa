@@ -1,6 +1,6 @@
 package com.junshock.jpatest.repository;
 
-import com.junshock.jpatest.domain.OrderStatus;
+import com.junshock.jpatest.domain.dto.OrderStatus;
 import lombok.Getter;
 import lombok.Setter;
 

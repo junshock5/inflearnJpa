@@ -1,9 +1,9 @@
 package com.junshock.jpatest.service;
 
-import com.junshock.jpatest.domain.Address;
+import com.junshock.jpatest.domain.dto.Address;
 import com.junshock.jpatest.domain.Member;
-import com.junshock.jpatest.domain.Order;
-import com.junshock.jpatest.domain.OrderStatus;
+import com.junshock.jpatest.domain.order.Order;
+import com.junshock.jpatest.domain.dto.OrderStatus;
 import com.junshock.jpatest.domain.item.Book;
 import com.junshock.jpatest.domain.item.Item;
 import com.junshock.jpatest.exception.NotEnoughStockException;

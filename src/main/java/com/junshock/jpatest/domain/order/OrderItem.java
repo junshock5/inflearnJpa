@@ -1,4 +1,4 @@
-package com.junshock.jpatest.domain;
+package com.junshock.jpatest.domain.order;
 
 import com.junshock.jpatest.domain.item.Item;
 import lombok.AccessLevel;

@@ -1,6 +1,5 @@
 package com.junshock.jpatest.domain.item;
 
-import com.junshock.jpatest.domain.Category;
 import com.junshock.jpatest.exception.NotEnoughStockException;
 import lombok.Getter;
 import lombok.Setter;
