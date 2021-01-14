@@ -1,6 +1,5 @@
-package com.junshock.jpatest.domain;
+package com.junshock.jpatest.domain.item;
 
-import com.junshock.jpatest.domain.item.Item;
 import lombok.Getter;
 import lombok.Setter;
 

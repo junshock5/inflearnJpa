@@ -1,5 +1,9 @@
-package com.junshock.jpatest.domain;
+package com.junshock.jpatest.domain.order;
 
+import com.junshock.jpatest.domain.Delivery;
+import com.junshock.jpatest.domain.Member;
+import com.junshock.jpatest.domain.dto.DeliveryStatus;
+import com.junshock.jpatest.domain.dto.OrderStatus;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
