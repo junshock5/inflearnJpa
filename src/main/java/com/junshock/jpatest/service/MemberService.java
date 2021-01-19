@@ -53,4 +53,14 @@ public class MemberService {
         return memberRepository.findOne(memberId);
     }
 
+    /**
+     * 회원 변경
+     * @param id
+     * @param name
+     */
+    @Transactional // 변경 감지로 jpa 영속성 컨텍스트가 관리
+    public void update(Long id, String name) {
+        Member member = memberRepository.findOne(id);
+        member.setName(name);
+    }
 }
