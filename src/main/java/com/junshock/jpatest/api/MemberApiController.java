@@ -9,12 +9,36 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
 public class MemberApiController {
 
     private final MemberService memberService;
+
+    // 엔티티 모든 값이 노출되서 업데이트시 API spec이 바뀐다.
+    @GetMapping("/api/v1/members")
+    public List<Member> membersV1() {
+        return memberService.findMembers();
+    }
+
+    /**
+     * 회원 조회
+     * Entity를 외부로 놓출하지 않고 Dto로 빼서 변화에 유연하게 설계
+     *
+     * @return
+     */
+    @GetMapping("/api/v2/members")
+    public Result memberV2() {
+        List<Member> findMembers = memberService.findMembers();
+        List<MemberDto> collect = findMembers.stream()
+                .map(m -> new MemberDto(m.getName()))
+                .collect(Collectors.toList());
+
+        return new Result(collect.size(), collect);
+    }
 
     /**
      * 멤버 등록 API
@@ -59,6 +83,19 @@ public class MemberApiController {
         memberService.update(id, request.getName());
         Member findMember = memberService.findOne(id);
         return new UpdateMemberResponse(findMember.getId(), findMember.getName());
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class Result<T> {
+        private int count;
+        private T data;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class MemberDto {
+        private String name;
     }
 
     @Data
