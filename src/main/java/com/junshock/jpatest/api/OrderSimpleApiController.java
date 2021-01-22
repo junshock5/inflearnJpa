@@ -5,6 +5,8 @@ import com.junshock.jpatest.domain.dto.OrderStatus;
 import com.junshock.jpatest.domain.order.Order;
 import com.junshock.jpatest.repository.OrderRepository;
 import com.junshock.jpatest.repository.OrderSearch;
+import com.junshock.jpatest.repository.order.simplequery.OrderSimpleQueryDto;
+import com.junshock.jpatest.repository.order.simplequery.OrderSimpleQueryRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 public class OrderSimpleApiController {
 
     private final OrderRepository orderRepository;
+    private final OrderSimpleQueryRepository orderSimpleQueryRepository;
 
     // 엔티티 직접 노출시 문제 발생
     // 1. 양방향 연관관계가 생겨 무한루프에 빠짐.. -> jsonIgnore
@@ -67,6 +70,11 @@ public class OrderSimpleApiController {
                 .collect(Collectors.toList());
 
         return result;
+    }
+
+    @GetMapping("/api/v4/simple-orders")
+    public List<OrderSimpleQueryDto> ordersV4() {
+        return orderSimpleQueryRepository.findOrderDtos();
     }
 
     @Data
