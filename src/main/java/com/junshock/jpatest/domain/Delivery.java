@@ -1,5 +1,6 @@
 package com.junshock.jpatest.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.junshock.jpatest.domain.dto.Address;
 import com.junshock.jpatest.domain.dto.DeliveryStatus;
 import com.junshock.jpatest.domain.order.Order;
@@ -20,6 +21,7 @@ public class Delivery {
     @Column(name = "delivery_id")
     private Long id;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "delivery", fetch = LAZY)
     private Order order;
 
