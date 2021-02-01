@@ -2,6 +2,7 @@ package com.junshock.jpatest.repository;
 
 import com.junshock.jpatest.domain.order.Order;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -65,5 +66,21 @@ public class OrderRepository {
                         " join fetch o.member m" +
                         " join fetch o.delivery d", Order.class
         ).getResultList();
+    }
+
+    // join시 n+1 쿼리가 발생한다. (데이터 중복 발생)
+    // jpa에서 entity로 데이터를 조인으로 가져올때 주문은 1건인데 주문거래에 2건있다고 데이터가 2배로 쌓인다.
+    // distinct db 에선 모두가 다 달라야 유니크하게 row로 select이 되지만, jpa에선 중복을 제거해서 entity로 관리한다.
+    // 1. db distinct 키워드를 추가한다. 2. entity 중복인경우(객체 인스턴스 동일) 필터한다.
+    public List<Order> findAllWithItem() {
+        return em.createQuery(
+                "select distinct o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d" +
+                        " join fetch o.orderItems oi" +
+                        " join fetch oi.item i", Order.class)
+                .setFirstResult(1)
+                .setMaxResults(100)
+                .getResultList();
     }
 }

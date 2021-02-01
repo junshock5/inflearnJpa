@@ -6,7 +6,6 @@ import com.junshock.jpatest.domain.order.Order;
 import com.junshock.jpatest.domain.order.OrderItem;
 import com.junshock.jpatest.repository.OrderRepository;
 import com.junshock.jpatest.repository.OrderSearch;
-import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,7 +38,7 @@ public class OrderApiController {
     // DTO로 변환 해서 호출하는 방식, DTO안에 랩핑을 했기 떄문에 부분적 노출임.
     // DTO 안에 OrderItem 까지도 DTO를 만들어야 노출이 안되고 확장에 유연한 구조임.
     @GetMapping("/api/v2/orders")
-    public List<OrderDto> ordeersV2(){
+    public List<OrderDto> ordersV2() {
         List<Order> orders = orderRepository.findAllByString(new OrderSearch());
         List<OrderDto> collect = orders.stream()
                 .map(o -> new OrderDto(o))
@@ -48,8 +47,26 @@ public class OrderApiController {
         return collect;
     }
 
+    // 패치조인, distinct 적용하여 중복row를 가져오는 쿼리를 단일 row로 최적화
+    // 패치조인 단점, db의 제약(limit, offset이 없다, appliying in memory 경고)으로 *페이징이 불가능하다.
+    @GetMapping("/api/v3/orders")
+    public List<OrderDto> ordersV3() {
+        List<Order> orders = orderRepository.findAllWithItem();
+
+        for (Order order : orders) {
+            // 객체 인스턴스의 참조값 까지 똑같은 중복 데이터 발생
+            System.out.println("order ref=" + order + " id=" + order.getId());
+        }
+
+        List<OrderDto> result = orders.stream()
+                .map(o -> new OrderDto(o))
+                .collect(Collectors.toList());
+
+        return result;
+    }
+
     @Getter
-    static class OrderDto{
+    static class OrderDto {
 
         private Long orderId;
         private String name;
@@ -58,7 +75,7 @@ public class OrderApiController {
         private Address address;
         private List<OrderItemDto> orderItems;
 
-        public OrderDto(Order order){
+        public OrderDto(Order order) {
             orderId = order.getId();
             name = order.getMember().getName();
             orderDate = order.getOrderDate();
@@ -71,7 +88,7 @@ public class OrderApiController {
     }
 
     @Getter
-    static class OrderItemDto{
+    static class OrderItemDto {
 
         private String itemName; //상품 명
         private int orderPrice; //주문 가격
