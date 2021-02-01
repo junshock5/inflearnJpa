@@ -12,6 +12,7 @@ spring:
      hibernate:
        show_sql: true
        format_sql: true
+       default_batch_fetch_size: 100 #컬렉션 데이터 쿼리 where 절에 in query 100번 실행 한다. (1:N:M -> 1:1:1)
 
 logging.level:
   org.hibernate.SQL: debug

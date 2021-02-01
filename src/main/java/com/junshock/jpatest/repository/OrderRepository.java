@@ -2,7 +2,6 @@ package com.junshock.jpatest.repository;
 
 import com.junshock.jpatest.domain.order.Order;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -24,7 +23,7 @@ public class OrderRepository {
     }
 
     public List<Order> findAllByString(OrderSearch orderSearch) {
-        // 주문 상태 검색 동적 쿼리(가독성 헤침, 버그 발생 가능성 o)
+        //주문 상태 검색 동적 쿼리(가독성 헤침, 버그 발생 가능성 o)
         //language=JPAQL
         String jpql = "select o From Order o join o.member m";
         boolean isFirstCondition = true;
@@ -66,6 +65,16 @@ public class OrderRepository {
                         " join fetch o.member m" +
                         " join fetch o.delivery d", Order.class
         ).getResultList();
+    }
+
+    public List<Order> findAllWithMemberDelivery(int offset, int limit) {
+        // ToOne 관계는 row수를 증가시키지 않아 페이징 쿼리에 영향을 주지 않는다.
+        // default_batch_fetch_size 영향을 받아서 최적화가 가능하다.
+        return em.createQuery(
+                "select o from Order o", Order.class)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
     }
 
     // join시 n+1 쿼리가 발생한다. (데이터 중복 발생)
