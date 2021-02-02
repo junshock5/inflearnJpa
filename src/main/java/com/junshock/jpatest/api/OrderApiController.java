@@ -6,6 +6,7 @@ import com.junshock.jpatest.domain.order.Order;
 import com.junshock.jpatest.domain.order.OrderItem;
 import com.junshock.jpatest.repository.OrderRepository;
 import com.junshock.jpatest.repository.OrderSearch;
+import com.junshock.jpatest.repository.order.query.OrderFlatDto;
 import com.junshock.jpatest.repository.order.query.OrderQueryDto;
 import com.junshock.jpatest.repository.order.query.OrderQueryRepository;
 import lombok.Getter;
@@ -91,6 +92,19 @@ public class OrderApiController {
     @GetMapping("/api/v4/orders")
     public List<OrderQueryDto> ordersV4() {
         return orderQueryRepository.findOrderQueryDtos();
+    }
+
+    // 메모리 Map에 collection 들을 저장함으로써 쿼리 횟수를 줄인다.
+    @GetMapping("/api/v5/orders")
+    public List<OrderQueryDto> ordersV5() {
+        return orderQueryRepository.findAllByDto_optimization();
+    }
+
+    // 단일쿼리로 가능하지만 페이징x
+    @GetMapping("/api/v6/orders")
+    public List<OrderFlatDto> ordersV6() {
+        List<OrderFlatDto> flats = orderQueryRepository.findAllByDto_float();
+        return flats;
     }
 
     @Getter
