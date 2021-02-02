@@ -6,6 +6,8 @@ import com.junshock.jpatest.domain.order.Order;
 import com.junshock.jpatest.domain.order.OrderItem;
 import com.junshock.jpatest.repository.OrderRepository;
 import com.junshock.jpatest.repository.OrderSearch;
+import com.junshock.jpatest.repository.order.query.OrderQueryDto;
+import com.junshock.jpatest.repository.order.query.OrderQueryRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 public class OrderApiController {
 
     private final OrderRepository orderRepository;
+    private final OrderQueryRepository orderQueryRepository;
 
     // Entity를 직접 노출후 호출 하는 방식(확장성 면에서 유연 하지 못하다.)
     @GetMapping("/api/v1/orders")
@@ -81,6 +84,13 @@ public class OrderApiController {
                 .collect(Collectors.toList());
 
         return result;
+    }
+
+    // findOrderQueryDtos 만든 이유는 controller의 OrderDto를 사용하고
+    // repository 참조 하면 의존 관계 순환 오류 가 생기기 떄문에 방지하기 위해서
+    @GetMapping("/api/v4/orders")
+    public List<OrderQueryDto> ordersV4() {
+        return orderQueryRepository.findOrderQueryDtos();
     }
 
     @Getter
