@@ -9,6 +9,7 @@ import com.junshock.jpatest.repository.OrderSearch;
 import com.junshock.jpatest.repository.order.query.OrderFlatDto;
 import com.junshock.jpatest.repository.order.query.OrderQueryDto;
 import com.junshock.jpatest.repository.order.query.OrderQueryRepository;
+import com.junshock.jpatest.service.query.OrderQueryService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +26,7 @@ public class OrderApiController {
 
     private final OrderRepository orderRepository;
     private final OrderQueryRepository orderQueryRepository;
+    private final OrderQueryService orderQueryService;
 
     // Entity를 직접 노출후 호출 하는 방식(확장성 면에서 유연 하지 못하다.)
     @GetMapping("/api/v1/orders")
@@ -50,6 +52,11 @@ public class OrderApiController {
                 .collect(Collectors.toList());
 
         return collect;
+    }
+
+    @GetMapping("/api/v3.0/orders")
+    public List<com.junshock.jpatest.service.query.OrderDto> ordersV3_0() {
+        return orderQueryService.ordersV3();
     }
 
     // 패치조인, distinct 적용하여 중복row를 가져오는 쿼리를 단일 row로 최적화
