@@ -13,7 +13,9 @@ spring:
        show_sql: true
        format_sql: true
        default_batch_fetch_size: 100 #컬렉션 데이터 쿼리 where 절에 in query 100번 실행 한다. (1:N:M -> 1:1:1)
-
+   open-in-view: false #OSIV를 끄면 트랜잭션을 종료할 떄 영속성 컨텍스트를 닫고, DB 커넥션도 반환한다. 따라서 *커넥션 리소스를 낭비하지 않는다.
+   #v1, getName하는순간 프록시 초기화를 해야하는데 영속선컨텍스트가 트랜잭션에만 있어서 아래와같은 에러발생. 트랜잭션 안에 로딩 or 페치조인 사용
+   #"message": "could not initialize proxy [com.junshock.jpatest.domain.Member#1] - no Session",
 logging.level:
   org.hibernate.SQL: debug
   org.hibernate.type: trace
