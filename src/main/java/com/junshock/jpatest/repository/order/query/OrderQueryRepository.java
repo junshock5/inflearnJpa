@@ -35,6 +35,7 @@ public class OrderQueryRepository {
         return result;
     }
 
+    // hibernate.default_batch_fetch_size, @batchsize로 최적화를 안하고 직접 하는 코드
     public List<OrderQueryDto> findAllByDto_optimization() {
         List<OrderQueryDto> result = findOrders();
 
