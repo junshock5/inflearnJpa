@@ -50,7 +50,7 @@ public class MemberService {
      * @return
      */
     public Member findOne(Long memberId) {
-        return memberRepository.findOne(memberId);
+        return memberRepository.findById(memberId).get();
     }
 
     /**
@@ -60,7 +60,7 @@ public class MemberService {
      */
     @Transactional // 변경 감지로 jpa 영속성 컨텍스트가 관리
     public void update(Long id, String name) {
-        Member member = memberRepository.findOne(id);
+        Member member = memberRepository.findById(id).get();
         member.setName(name);
     }
 }
