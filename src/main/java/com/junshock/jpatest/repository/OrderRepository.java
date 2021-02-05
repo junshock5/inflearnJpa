@@ -1,7 +1,14 @@
 package com.junshock.jpatest.repository;
 
+import com.junshock.jpatest.domain.QMember;
+import com.junshock.jpatest.domain.dto.OrderStatus;
 import com.junshock.jpatest.domain.order.Order;
+import com.junshock.jpatest.domain.order.QOrder;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -10,9 +17,14 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Repository
-@RequiredArgsConstructor
 public class OrderRepository {
     private final EntityManager em;
+    private final JPAQueryFactory query;
+
+    public OrderRepository(EntityManager em) {
+        this.em = em;
+        this.query = new JPAQueryFactory(em);
+    }
 
     public void save(Order order) {
         em.persist(order);
@@ -65,6 +77,34 @@ public class OrderRepository {
                         " join fetch o.member m" +
                         " join fetch o.delivery d", Order.class
         ).getResultList();
+    }
+
+    public List<Order> findAll(OrderSearch orderSearch) {
+//        JPAQueryFactory query = new JPAQueryFactory(em);
+//        QOrder order = QOrder.order;
+//        QMember member = QMember.member.member;
+
+        // 컴파일 시점에 오타가 다잡힌다. (프로그래머 실수 방지)
+        return query.select(QOrder.order)
+                .from(QOrder.order)
+                .join(QOrder.order.member, QMember.member)
+                .where(statusEq(orderSearch.getOrderStatus()), nameLike(orderSearch.getMemberName()))
+                .limit(1000)
+                .fetch();
+    }
+
+    private BooleanExpression nameLike(String memberName) {
+        if (!StringUtils.hasText(memberName)) {
+            return null;
+        }
+        return QMember.member.name.like(memberName);
+    }
+
+    private BooleanExpression statusEq(OrderStatus statusCond) {
+        if (statusCond == null) {
+            return null;
+        }
+        return QOrder.order.status.eq(statusCond);
     }
 
     public List<Order> findAllWithMemberDelivery(int offset, int limit) {
