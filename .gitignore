@@ -34,3 +34,4 @@ out/
 .gradle
 /build/
 /out
+/src/main/generated/
