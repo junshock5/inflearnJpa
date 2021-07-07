@@ -1,11 +1,11 @@
-package com.junshock.jpatest;
+package com.junshock.jpatest.domain;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /*
 @Entity 어노테이션을 클래스에 선언하면 그 클래스는 JPA가 관리합니다.
@@ -23,6 +23,14 @@ public class Member {
 
     @Id
     @GeneratedValue
+    @Column(name = "member_id")
     private Long id;
-    private String username;
+
+    private String name;
+
+    @Embedded // 내장  타입을 포함했다는 의미
+    private Address address;
+
+    @OneToMany(mappedBy = "member") // 하나의 회원이 여러개 주문을 갖는다. 1:N, 연관관계 참조 설정
+    private List<Order> orders = new ArrayList<>(); // 바로 초기화하여 null 문제 안전, 하이버네이트 엔터티 영속시 내장 컬렉션 변경되기 떄문에 데이터 불일치 방지
 }
